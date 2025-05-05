@@ -1,28 +1,62 @@
-import { Avatar } from "primereact/avatar";
-import { Column } from "primereact/column";
-import { DataTable } from "primereact/datatable";
 import type { Characters } from "../model/character";
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import CardActionArea from '@mui/material/CardActionArea';
+import { Box } from "@mui/material";
 
 interface CharacterCardProps {
   characters: Characters[];
 }
 
 const CharacterCard = ({ characters }: CharacterCardProps) => {
-    const imageBodyTemplatev2 = (character: Characters) => {
-        return <Avatar image={character.image} shape="circle" />;
-    };
-
     return (
-        <DataTable value={characters} tableStyle={{ minWidth: "50rem" }}>
-            <Column header="Image" body={imageBodyTemplatev2}></Column>
-            <Column field="id" header="id"></Column>
-            <Column field="name" header="name"></Column>
-            <Column field="race" header="race"></Column>
-            <Column field="gender" header="gender"></Column>
-            <Column field="ki" header="ki"></Column>
-            <Column field="maxKi" header="maxKi"></Column>
-            <Column field="affiliation" header="affiliation"></Column>
-        </DataTable>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+            {characters.map((character) => (
+                <Card key={character.id} sx={{ minWidth: 345, maxWidth: 345 }}>
+                    <CardActionArea>
+                        <CardMedia
+                            component="img"
+                            height="200"
+                            image={character.image}
+                            alt={character.name}
+                            sx={{
+                                objectFit: 'contain',
+                                backgroundColor: 'black',
+                                padding: '8px'
+                            }}
+                        />
+                        <CardContent>
+                            <Typography gutterBottom variant="h5" component="div">
+                                {character.name}
+                            </Typography>
+                            <Typography variant="body2" sx={{ 
+                                color: 'text.secondary',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                display: '-webkit-box',
+                                WebkitLineClamp: 3,
+                                WebkitBoxOrient: 'vertical'
+                            }}>
+                                {character.description.length > 300 
+                                    ? `${character.description.substring(0, 300)}...` 
+                                    : character.description}
+                            </Typography>
+                            <Typography variant="body2" sx={{ mt: 1 }}>
+                                Raça: {character.race}
+                            </Typography>
+                            <Typography variant="body2">
+                                Ki: {character.ki} / {character.maxKi}
+                            </Typography>
+                            <Typography variant="body2">
+                                Afiliação: {character.affiliation}
+                            </Typography>
+                        </CardContent>
+                    </CardActionArea>
+                </Card>
+            ))}
+        </Box>
     );
 };
 
